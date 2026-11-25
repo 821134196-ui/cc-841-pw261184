@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "tests": [
+    {
+      "name": "crypto-contract",
+      "kind": "contract",
+      "cost": 20,
+      "covers_contracts": ["crypto.sign", "crypto.verify"]
+    },
+    {
+      "name": "crypto-arch-ios",
+      "kind": "arch",
+      "cost": 45,
+      "covers_modules": ["core/crypto"],
+      "platforms": ["ios"]
+    },
+    {
+      "name": "crypto-arch-android",
+      "kind": "arch",
+      "cost": 45,
+      "covers_modules": ["core/crypto"],
+      "platforms": ["android"]
+    },
+    {
+      "name": "keystore-ios-arch",
+      "kind": "arch",
+      "cost": 30,
+      "covers_modules": ["platform/keystore-ios"],
+      "platforms": ["ios"]
+    },
+    {
+      "name": "keystore-android-arch",
+      "kind": "arch",
+      "cost": 30,
+      "covers_modules": ["platform/keystore-android"],
+      "platforms": ["android"]
+    },
+    {
+      "name": "player-playlist-e2e",
+      "kind": "e2e",
+      "cost": 60,
+      "covers_modules": ["feature/player", "feature/playlist"],
+      "platforms": ["ios", "android", "web"]
+    },
+    {
+      "name": "shell-e2e-web",
+      "kind": "e2e",
+      "cost": 90,
+      "covers_modules": ["app/shell"],
+      "platforms": ["web"]
+    },
+    {
+      "name": "shell-arch-ios",
+      "kind": "arch",
+      "cost": 50,
+      "covers_modules": ["app/shell"],
+      "platforms": ["ios"]
+    },
+    {
+      "name": "shell-arch-android",
+      "kind": "arch",
+      "cost": 50,
+      "covers_modules": ["app/shell"],
+      "platforms": ["android"]
+    },
+    {
+      "name": "net-contract",
+      "kind": "contract",
+      "cost": 15,
+      "covers_contracts": ["net.retry"]
+    }
+  ]
+}

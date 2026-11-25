@@ -1,0 +1,4 @@
+# 本次变更:每行一个模块名或文件路径,# 开头为注释
+libs/crypto/sign.py
+features/player/src/decoder.py
+docs/release-notes.md

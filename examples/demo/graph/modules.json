@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "modules": [
+    {
+      "name": "core/base",
+      "paths": ["libs/base/**"],
+      "platforms": ["ios", "android", "web"],
+      "contracts": [],
+      "deps": []
+    },
+    {
+      "name": "core/crypto",
+      "paths": ["libs/crypto/**"],
+      "platforms": ["ios", "android", "web"],
+      "contracts": ["crypto.sign", "crypto.verify"],
+      "deps": ["core/base"]
+    },
+    {
+      "name": "core/net",
+      "paths": ["libs/net/**"],
+      "platforms": ["ios", "android", "web"],
+      "contracts": ["net.retry"],
+      "deps": ["core/base"]
+    },
+    {
+      "name": "platform/keystore-ios",
+      "paths": ["platform/keystore-ios/**"],
+      "platforms": ["ios"],
+      "contracts": [],
+      "deps": ["core/crypto"]
+    },
+    {
+      "name": "platform/keystore-android",
+      "paths": ["platform/keystore-android/**"],
+      "platforms": ["android"],
+      "contracts": [],
+      "deps": ["core/crypto"]
+    },
+    {
+      "name": "feature/player",
+      "paths": ["features/player/**"],
+      "platforms": ["ios", "android", "web"],
+      "contracts": [],
+      "deps": ["core/net", "feature/playlist"]
+    },
+    {
+      "name": "feature/playlist",
+      "paths": ["features/playlist/**"],
+      "platforms": ["ios", "android", "web"],
+      "contracts": [],
+      "deps": ["core/net", "feature/player"]
+    },
+    {
+      "name": "feature/search",
+      "paths": ["features/search/**"],
+      "platforms": ["ios", "android", "web"],
+      "contracts": [],
+      "deps": ["core/net"]
+    },
+    {
+      "name": "app/shell",
+      "paths": ["apps/shell/**"],
+      "platforms": ["ios", "android", "web"],
+      "contracts": [],
+      "deps": [
+        {"pattern": "feature/*"},
+        "core/crypto",
+        {"name": "platform/keystore-ios", "platforms": ["ios"]},
+        {"name": "platform/keystore-android", "platforms": ["android"]}
+      ]
+    },
+    {
+      "name": "app/wear",
+      "paths": ["apps/wear/**"],
+      "platforms": ["android"],
+      "contracts": [],
+      "deps": ["core/base"]
+    }
+  ]
+}

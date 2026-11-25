@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>变更影响面计划</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface-1: #fcfcfb; --page: #f9f9f7;
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --hairline: #e1e0d9; --baseline: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  --series-1: #2a78d6;
+  --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
+  --good-ink: #006300;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --surface-1: #1a1a19; --page: #0d0d0d;
+    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --hairline: #2c2c2a; --baseline: #383835;
+    --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5;
+    --good-ink: #0ca30c;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #1a1a19; --page: #0d0d0d;
+  --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --hairline: #2c2c2a; --baseline: #383835;
+  --border: rgba(255,255,255,0.10);
+  --series-1: #3987e5;
+  --good-ink: #0ca30c;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.55;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 64px; }
+header.top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px;
+  border-bottom: 1px solid var(--hairline); padding-bottom: 16px; }
+header.top h1 { font-size: 22px; margin: 0; flex: 1 1 auto; }
+header.top .meta { color: var(--muted); font-size: 13px; }
+button.theme { background: none; border: 1px solid var(--baseline); border-radius: 6px;
+  color: var(--ink-2); padding: 4px 10px; cursor: pointer; font-size: 13px; }
+h2 { font-size: 17px; margin: 36px 0 4px; }
+h3 { font-size: 15px; margin: 20px 0 6px; }
+.muted { color: var(--muted); }
+section > p.desc { color: var(--ink-2); margin: 4px 0 12px; font-size: 14px; }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px; margin-top: 20px; }
+.stat { background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px 14px; }
+.stat-label { color: var(--muted); font-size: 12.5px; }
+.stat-value { font-size: 26px; margin-top: 2px; }
+.stat-sub { color: var(--ink-2); font-size: 12.5px; }
+
+.meter-block { background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px; margin-top: 12px; }
+.meter-head { display: flex; justify-content: space-between; align-items: center;
+  font-size: 14px; margin-bottom: 8px; }
+.meter { height: 10px; background: var(--hairline); border-radius: 5px; overflow: hidden; }
+.meter-fill { height: 100%; background: var(--series-1);
+  border-radius: 0 4px 4px 0; }
+.meter-fig { color: var(--ink-2); font-size: 13px; margin-top: 6px;
+  font-variant-numeric: tabular-nums; }
+
+.status { font-size: 13px; font-weight: 600; white-space: nowrap; }
+.status-good { color: var(--good-ink); }
+.status-warning { color: #0b0b0b; background: var(--warning);
+  border-radius: 4px; padding: 1px 6px; }
+.status-serious { color: var(--serious); }
+.status-critical { color: var(--critical); }
+
+.chip { display: inline-block; border: 1px solid var(--baseline); border-radius: 10px;
+  padding: 0 8px; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+.chip-direct { border-color: var(--ink-2); color: var(--ink); font-weight: 600; }
+.tag { font-size: 11.5px; border: 1px solid var(--hairline); border-radius: 4px;
+  padding: 0 5px; color: var(--muted); }
+.tag-wild { border-style: dashed; color: var(--ink-2); }
+.tag-plat { color: var(--ink-2); }
+
+table { width: 100%; border-collapse: collapse; background: var(--surface-1);
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  font-size: 14px; margin-top: 4px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--hairline);
+  vertical-align: top; }
+th { color: var(--muted); font-size: 12.5px; font-weight: 600; }
+tbody tr:last-child td { border-bottom: none; }
+td.num { font-variant-numeric: tabular-nums; text-align: right; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
+
+.filters { display: flex; gap: 8px; margin: 10px 0 6px; flex-wrap: wrap; }
+.filters input, .filters select {
+  background: var(--surface-1); color: var(--ink); border: 1px solid var(--baseline);
+  border-radius: 6px; padding: 5px 10px; font-size: 13px; }
+.filters input { flex: 1 1 180px; }
+
+details summary { cursor: pointer; color: var(--ink-2); font-size: 13px; }
+details[open] summary { margin-bottom: 6px; }
+.trace { list-style: none; margin: 4px 0; padding: 0 0 0 2px; font-size: 13px; }
+.trace li { padding: 3px 0 3px 18px; position: relative; }
+.trace li::before { content: "→"; position: absolute; left: 0; color: var(--muted); }
+.trace li:first-child::before { content: "●"; color: var(--critical); }
+.cycle-note { font-size: 12.5px; color: var(--ink-2); border-left: 3px solid var(--warning);
+  padding: 2px 8px; margin: 6px 0; }
+ul.obs { margin: 4px 0; padding-left: 18px; }
+ul.obs li { margin-bottom: 8px; }
+ul.cyc li { margin: 4px 0; }
+
+.callout { border: 1px solid var(--border); border-left: 3px solid var(--warning);
+  background: var(--surface-1); border-radius: 6px; padding: 10px 14px; margin-top: 12px;
+  font-size: 14px; }
+.risk { border: 1px solid var(--border); background: var(--surface-1);
+  border-radius: 8px; padding: 12px 16px; margin-top: 10px; font-size: 14px; }
+.risk h4 { margin: 6px 0 4px; font-size: 15px; }
+.risk p { margin: 4px 0; }
+.risk-critical { border-left: 3px solid var(--critical); }
+.risk-high { border-left: 3px solid var(--serious); }
+.risk-medium { border-left: 3px solid var(--warning); }
+.risk-nums { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.ok { font-size: 14px; }
+footer { margin-top: 40px; color: var(--muted); font-size: 12.5px;
+  border-top: 1px solid var(--hairline); padding-top: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>变更影响面计划</h1>
+    <span class='status status-critical'>✖ 有未覆盖风险</span>
+    <button class="theme" onclick="toggleTheme()" aria-label="切换明暗主题">◐ 主题</button>
+    <div class="meta">生成于 2026-11-26T07:54:54+08:00 · 图目录 <code>examples/demo/graph</code></div>
+  </header>
+
+  <div class="stats"><div class='stat'><div class='stat-label'>变更模块</div><div class='stat-value'>2</div></div><div class='stat'><div class='stat-label'>失效制品</div><div class='stat-value'>14</div></div><div class='stat'><div class='stat-label'>入选测试</div><div class='stat-value'>7</div><div class='stat-sub'>共 300 分钟</div></div><div class='stat'><div class='stat-label'>覆盖义务</div><div class='stat-value'>13/16</div></div><div class='stat'><div class='stat-label'>未覆盖风险</div><div class='stat-value'>3</div><div class='stat-sub'>需要处理</div></div></div>
+  
+    <div class="meter-block">
+      <div class="meter-head"><span>测试预算</span><span class='status status-critical'>✖ 预算不足,存在未覆盖项</span></div>
+      <div class="meter" role="img" aria-label="预算已用 300 分钟,共 300 分钟">
+        <div class="meter-fill" style="width:100.0%"></div>
+      </div>
+      <div class="meter-fig">已用 300 / 300 分钟 · 剩余 0 分钟</div>
+    </div>
+
+  <section>
+    <h2>变更与依赖图解析</h2>
+    <p class="desc">本次变更命中的模块,以及图中需要说明的三类结构:通配符依赖、循环依赖、平台限定边。</p>
+    <h3>变更模块</h3>
+    <ul><li><code>core/crypto</code></li><li><code>feature/player</code></li></ul>
+    <div class='callout warn'><span class='status status-warning'>⚠ 未映射的变更</span><p>以下变更不属于任何模块的 paths,未参与影响面计算:</p><ul><li><code>docs/release-notes.md</code></li></ul></div>
+    <h3>通配符依赖解析</h3><p class='muted'>通配符每次运行重新展开,成员增删即时生效。</p><table><thead><tr><th>消费者</th><th>模式</th><th>本次匹配</th><th>平台限定</th></tr></thead><tbody><tr><td><code>app/shell</code></td><td><code>feature/*</code></td><td><code>feature/player</code>、<code>feature/playlist</code>、<code>feature/search</code></td><td>全部</td></tr></tbody></table>
+    <h3>循环依赖</h3><ul class='cyc'><li>组 #1:<code>feature/player</code> ↔ <code>feature/playlist</code><span class='muted'> —— 任一成员变更,全组制品失效</span></li></ul>
+  </section>
+
+  <section>
+    <h2>需要失效的制品</h2>
+    <p class="desc">按 (模块 × 平台) 计算;平台限定边只让对应平台的制品失效。每行可展开查看从变更源到该制品的传导链。</p>
+    <div class='filters'><input type='search' id='inv-q' placeholder='过滤…' oninput="filterTable('inv')" aria-label='文本过滤'><select id='inv-platform' onchange="filterTable('inv')" aria-label='平台'><option value=''>平台:全部</option><option value='android'>android</option><option value='ios'>ios</option><option value='web'>web</option></select></div><table id='inv-table'><thead><tr><th>制品</th><th>平台</th><th>影响方式</th><th>失效原因(可展开)</th></tr></thead><tbody><tr data-platform='android' data-text='app/shell:android'><td><code>app/shell:android</code></td><td>android</td><td><span class='chip '>○ 传递影响</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li><li><code>app/shell</code> <span class='via'>直接依赖 core/crypto</span> <span class='tag'>显式</span></li></ol></details></td></tr><tr data-platform='ios' data-text='app/shell:ios'><td><code>app/shell:ios</code></td><td>ios</td><td><span class='chip '>○ 传递影响</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li><li><code>app/shell</code> <span class='via'>直接依赖 core/crypto</span> <span class='tag'>显式</span></li></ol></details></td></tr><tr data-platform='web' data-text='app/shell:web'><td><code>app/shell:web</code></td><td>web</td><td><span class='chip '>○ 传递影响</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li><li><code>app/shell</code> <span class='via'>直接依赖 core/crypto</span> <span class='tag'>显式</span></li></ol></details></td></tr><tr data-platform='android' data-text='core/crypto:android'><td><code>core/crypto:android</code></td><td>android</td><td><span class='chip chip-direct'>● 直接变更</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li></ol></details></td></tr><tr data-platform='ios' data-text='core/crypto:ios'><td><code>core/crypto:ios</code></td><td>ios</td><td><span class='chip chip-direct'>● 直接变更</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li></ol></details></td></tr><tr data-platform='web' data-text='core/crypto:web'><td><code>core/crypto:web</code></td><td>web</td><td><span class='chip chip-direct'>● 直接变更</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li></ol></details></td></tr><tr data-platform='android' data-text='feature/player:android'><td><code>feature/player:android</code></td><td>android</td><td><span class='chip chip-direct'>● 直接变更</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></td></tr><tr data-platform='ios' data-text='feature/player:ios'><td><code>feature/player:ios</code></td><td>ios</td><td><span class='chip chip-direct'>● 直接变更</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></td></tr><tr data-platform='web' data-text='feature/player:web'><td><code>feature/player:web</code></td><td>web</td><td><span class='chip chip-direct'>● 直接变更</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></td></tr><tr data-platform='android' data-text='feature/playlist:android'><td><code>feature/playlist:android</code></td><td>android</td><td><span class='chip '>○ 传递影响</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li><li><code>feature/playlist</code> <span class='via'>直接依赖 feature/player</span> <span class='tag'>显式</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></td></tr><tr data-platform='ios' data-text='feature/playlist:ios'><td><code>feature/playlist:ios</code></td><td>ios</td><td><span class='chip '>○ 传递影响</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li><li><code>feature/playlist</code> <span class='via'>直接依赖 feature/player</span> <span class='tag'>显式</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></td></tr><tr data-platform='web' data-text='feature/playlist:web'><td><code>feature/playlist:web</code></td><td>web</td><td><span class='chip '>○ 传递影响</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li><li><code>feature/playlist</code> <span class='via'>直接依赖 feature/player</span> <span class='tag'>显式</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></td></tr><tr data-platform='android' data-text='platform/keystore-android:android'><td><code>platform/keystore-android:android</code></td><td>android</td><td><span class='chip '>○ 传递影响</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li><li><code>platform/keystore-android</code> <span class='via'>直接依赖 core/crypto</span> <span class='tag'>显式</span></li></ol></details></td></tr><tr data-platform='ios' data-text='platform/keystore-ios:ios'><td><code>platform/keystore-ios:ios</code></td><td>ios</td><td><span class='chip '>○ 传递影响</span></td><td><details><summary>为什么失效</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li><li><code>platform/keystore-ios</code> <span class='via'>直接依赖 core/crypto</span> <span class='tag'>显式</span></li></ol></details></td></tr></tbody></table>
+  </section>
+
+  <section>
+    <h2>必跑测试</h2>
+    <p class="desc">通用契约测试只清偿显式声明的契约义务;架构/端到端测试清偿 (模块, 平台) 义务。点开「为什么入选」可反查到每条义务的变更溯源。</p>
+    <div class='filters'><input type='search' id='tst-q' placeholder='过滤…' oninput="filterTable('tst')" aria-label='文本过滤'><select id='tst-kind' onchange="filterTable('tst')" aria-label='类型'><option value=''>类型:全部</option><option value='contract'>通用契约</option><option value='arch'>架构专用</option><option value='e2e'>端到端</option></select></div><table id='tst-table'><thead><tr><th>测试</th><th>类型</th><th>成本(分钟)</th><th>平台</th><th>入选理由(可反点)</th></tr></thead><tbody><tr data-kind='arch' data-text='crypto-arch-android'><td><code>crypto-arch-android</code></td><td><span class='chip chip-arch'>架构专用</span></td><td class='num'>45</td><td>android</td><td><details><summary>1 项义务 · 为什么入选</summary><ul class='obs'><li><strong>core/crypto @ android 的架构专用验证</strong><span class='muted'>(直接变更)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li></ol></details></li></ul></details></td></tr><tr data-kind='arch' data-text='crypto-arch-ios'><td><code>crypto-arch-ios</code></td><td><span class='chip chip-arch'>架构专用</span></td><td class='num'>45</td><td>ios</td><td><details><summary>1 项义务 · 为什么入选</summary><ul class='obs'><li><strong>core/crypto @ ios 的架构专用验证</strong><span class='muted'>(直接变更)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li></ol></details></li></ul></details></td></tr><tr data-kind='e2e' data-text='player-playlist-e2e'><td><code>player-playlist-e2e</code></td><td><span class='chip chip-e2e'>端到端</span></td><td class='num'>60</td><td>ios、android、web</td><td><details><summary>6 项义务 · 为什么入选</summary><ul class='obs'><li><strong>feature/player @ android 的架构专用验证</strong><span class='muted'>(直接变更)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></li><li><strong>feature/player @ ios 的架构专用验证</strong><span class='muted'>(直接变更)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></li><li><strong>feature/player @ web 的架构专用验证</strong><span class='muted'>(直接变更)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></li><li><strong>feature/playlist @ android 的架构专用验证</strong><span class='muted'>(传递影响)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li><li><code>feature/playlist</code> <span class='via'>直接依赖 feature/player</span> <span class='tag'>显式</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></li><li><strong>feature/playlist @ ios 的架构专用验证</strong><span class='muted'>(传递影响)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li><li><code>feature/playlist</code> <span class='via'>直接依赖 feature/player</span> <span class='tag'>显式</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></li><li><strong>feature/playlist @ web 的架构专用验证</strong><span class='muted'>(传递影响)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>feature/player</code> <span class='via'>变更源</span></li><li><code>feature/playlist</code> <span class='via'>直接依赖 feature/player</span> <span class='tag'>显式</span></li></ol><p class='cycle-note'>↻ 循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效</p></details></li></ul></details></td></tr><tr data-kind='arch' data-text='shell-arch-android'><td><code>shell-arch-android</code></td><td><span class='chip chip-arch'>架构专用</span></td><td class='num'>50</td><td>android</td><td><details><summary>1 项义务 · 为什么入选</summary><ul class='obs'><li><strong>app/shell @ android 的架构专用验证</strong><span class='muted'>(传递影响)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li><li><code>app/shell</code> <span class='via'>直接依赖 core/crypto</span> <span class='tag'>显式</span></li></ol></details></li></ul></details></td></tr><tr data-kind='arch' data-text='shell-arch-ios'><td><code>shell-arch-ios</code></td><td><span class='chip chip-arch'>架构专用</span></td><td class='num'>50</td><td>ios</td><td><details><summary>1 项义务 · 为什么入选</summary><ul class='obs'><li><strong>app/shell @ ios 的架构专用验证</strong><span class='muted'>(传递影响)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li><li><code>app/shell</code> <span class='via'>直接依赖 core/crypto</span> <span class='tag'>显式</span></li></ol></details></li></ul></details></td></tr><tr data-kind='arch' data-text='keystore-android-arch'><td><code>keystore-android-arch</code></td><td><span class='chip chip-arch'>架构专用</span></td><td class='num'>30</td><td>android</td><td><details><summary>1 项义务 · 为什么入选</summary><ul class='obs'><li><strong>platform/keystore-android @ android 的架构专用验证</strong><span class='muted'>(传递影响)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li><li><code>platform/keystore-android</code> <span class='via'>直接依赖 core/crypto</span> <span class='tag'>显式</span></li></ol></details></li></ul></details></td></tr><tr data-kind='contract' data-text='crypto-contract'><td><code>crypto-contract</code></td><td><span class='chip chip-contract'>通用契约</span></td><td class='num'>20</td><td>任意平台</td><td><details><summary>2 项义务 · 为什么入选</summary><ul class='obs'><li><strong>core/crypto 声明的契约 crypto.sign</strong><span class='muted'>(直接变更)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li></ol></details></li><li><strong>core/crypto 声明的契约 crypto.verify</strong><span class='muted'>(直接变更)</span><details><summary>溯源到变更</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li></ol></details></li></ul></details></td></tr></tbody></table>
+  </section>
+
+  <section>
+    <h2>未覆盖风险</h2>
+    <p class="desc">预算内无法安排、或根本没有候选测试的义务。这些是随本次发布上线的具体缺口。</p>
+    <div class='risk risk-critical'><span class='status status-critical'>✖ 危急 · R1</span><h4>无可用测试:core/crypto @ web 的架构专用验证 没有任何候选</h4><p>模块 core/crypto 直接变更,web 平台制品已失效,但没有任何 arch/e2e 测试覆盖 (core/crypto, web)。该模块声明的契约 [crypto.sign, crypto.verify] 可由通用契约测试覆盖,但契约之外的 web 平台专属行为没有任何测试验证——通用测试不能替代架构专用用例。需要补一个覆盖该模块该平台用例的架构/端到端测试。</p><details><summary>影响如何传导到这里</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li></ol></details></div><div class='risk risk-high'><span class='status status-high'>▲ 高 · R2</span><h4>预算不足:app/shell @ web 的架构专用验证 无法安排</h4><p>模块 app/shell 受变更传递影响,制品需要app/shell @ web 的架构专用验证;最便宜的候选测试 shell-e2e-web 需 90 分钟,但剩余预算只有 50 分钟。该项验证缺失将随本次发布上线,建议追加预算或单独补跑 shell-e2e-web。</p><p class='risk-nums'>最便宜候选需 <strong>90</strong> 分钟,剩余预算 <strong>50</strong> 分钟</p><details><summary>影响如何传导到这里</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li><li><code>app/shell</code> <span class='via'>直接依赖 core/crypto</span> <span class='tag'>显式</span></li></ol></details></div><div class='risk risk-high'><span class='status status-high'>▲ 高 · R3</span><h4>预算不足:platform/keystore-ios @ ios 的架构专用验证 无法安排</h4><p>模块 platform/keystore-ios 受变更传递影响,制品需要platform/keystore-ios @ ios 的架构专用验证;最便宜的候选测试 keystore-ios-arch 需 30 分钟,但剩余预算只有 20 分钟。该项验证缺失将随本次发布上线,建议追加预算或单独补跑 keystore-ios-arch。</p><p class='risk-nums'>最便宜候选需 <strong>30</strong> 分钟,剩余预算 <strong>20</strong> 分钟</p><details><summary>影响如何传导到这里</summary><ol class='trace'><li><code>core/crypto</code> <span class='via'>变更源</span></li><li><code>platform/keystore-ios</code> <span class='via'>直接依赖 core/crypto</span> <span class='tag'>显式</span></li></ol></details></div>
+  </section>
+
+  <footer>pointwise-delivery · 计划数据见同目录 plan.json · 通用测试仅覆盖显式声明的契约,不替代架构专用用例</footer>
+</div>
+<script>
+function toggleTheme() {
+  var r = document.documentElement;
+  var cur = r.getAttribute('data-theme');
+  var next = cur === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', next);
+  try { localStorage.setItem('pd-theme', next); } catch (e) {}
+}
+try {
+  var saved = localStorage.getItem('pd-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+} catch (e) {}
+function filterTable(prefix) {
+  var q = (document.getElementById(prefix + '-q').value || '').toLowerCase();
+  var table = document.getElementById(prefix + '-table');
+  var selects = table.previousElementSibling.querySelectorAll('select');
+  var dims = [];
+  selects.forEach(function (s) {
+    if (s.value) dims.push({ attr: s.id.slice(prefix.length + 1), value: s.value });
+  });
+  table.querySelectorAll('tbody tr').forEach(function (tr) {
+    var ok = !q || (tr.dataset.text || '').indexOf(q) !== -1;
+    for (var i = 0; i < dims.length && ok; i++) {
+      ok = tr.dataset[dims[i].attr] === dims[i].value;
+    }
+    tr.style.display = ok ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

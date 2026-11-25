@@ -1,0 +1,860 @@
+{
+  "version": 1,
+  "tool": "pointwise-delivery",
+  "generated_at": "2026-11-26T07:54:54+08:00",
+  "graph_dir": "examples/demo/graph",
+  "changes": {
+    "modules": [
+      "core/crypto",
+      "feature/player"
+    ],
+    "unmapped": [
+      "docs/release-notes.md"
+    ]
+  },
+  "wildcard_edges": [
+    {
+      "consumer": "app/shell",
+      "pattern": "feature/*",
+      "matched": [
+        "feature/player",
+        "feature/playlist",
+        "feature/search"
+      ],
+      "platforms": null
+    }
+  ],
+  "cycles": [
+    {
+      "id": 1,
+      "members": [
+        "feature/player",
+        "feature/playlist"
+      ],
+      "note": "任一成员变更,全组 2 个模块的制品失效"
+    }
+  ],
+  "invalidated": [
+    {
+      "artifact": "app/shell:android",
+      "module": "app/shell",
+      "platform": "android",
+      "direct": false,
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          },
+          {
+            "module": "app/shell",
+            "note": "直接依赖 core/crypto",
+            "edge": {
+              "via": "explicit",
+              "pattern": null,
+              "platforms": null,
+              "describe": "直接依赖 core/crypto"
+            }
+          }
+        ],
+        "cycle_note": null
+      }
+    },
+    {
+      "artifact": "app/shell:ios",
+      "module": "app/shell",
+      "platform": "ios",
+      "direct": false,
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          },
+          {
+            "module": "app/shell",
+            "note": "直接依赖 core/crypto",
+            "edge": {
+              "via": "explicit",
+              "pattern": null,
+              "platforms": null,
+              "describe": "直接依赖 core/crypto"
+            }
+          }
+        ],
+        "cycle_note": null
+      }
+    },
+    {
+      "artifact": "app/shell:web",
+      "module": "app/shell",
+      "platform": "web",
+      "direct": false,
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          },
+          {
+            "module": "app/shell",
+            "note": "直接依赖 core/crypto",
+            "edge": {
+              "via": "explicit",
+              "pattern": null,
+              "platforms": null,
+              "describe": "直接依赖 core/crypto"
+            }
+          }
+        ],
+        "cycle_note": null
+      }
+    },
+    {
+      "artifact": "core/crypto:android",
+      "module": "core/crypto",
+      "platform": "android",
+      "direct": true,
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          }
+        ],
+        "cycle_note": null
+      }
+    },
+    {
+      "artifact": "core/crypto:ios",
+      "module": "core/crypto",
+      "platform": "ios",
+      "direct": true,
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          }
+        ],
+        "cycle_note": null
+      }
+    },
+    {
+      "artifact": "core/crypto:web",
+      "module": "core/crypto",
+      "platform": "web",
+      "direct": true,
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          }
+        ],
+        "cycle_note": null
+      }
+    },
+    {
+      "artifact": "feature/player:android",
+      "module": "feature/player",
+      "platform": "android",
+      "direct": true,
+      "trace": {
+        "steps": [
+          {
+            "module": "feature/player",
+            "note": "变更源",
+            "edge": null
+          }
+        ],
+        "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+      }
+    },
+    {
+      "artifact": "feature/player:ios",
+      "module": "feature/player",
+      "platform": "ios",
+      "direct": true,
+      "trace": {
+        "steps": [
+          {
+            "module": "feature/player",
+            "note": "变更源",
+            "edge": null
+          }
+        ],
+        "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+      }
+    },
+    {
+      "artifact": "feature/player:web",
+      "module": "feature/player",
+      "platform": "web",
+      "direct": true,
+      "trace": {
+        "steps": [
+          {
+            "module": "feature/player",
+            "note": "变更源",
+            "edge": null
+          }
+        ],
+        "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+      }
+    },
+    {
+      "artifact": "feature/playlist:android",
+      "module": "feature/playlist",
+      "platform": "android",
+      "direct": false,
+      "trace": {
+        "steps": [
+          {
+            "module": "feature/player",
+            "note": "变更源",
+            "edge": null
+          },
+          {
+            "module": "feature/playlist",
+            "note": "直接依赖 feature/player",
+            "edge": {
+              "via": "explicit",
+              "pattern": null,
+              "platforms": null,
+              "describe": "直接依赖 feature/player"
+            }
+          }
+        ],
+        "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+      }
+    },
+    {
+      "artifact": "feature/playlist:ios",
+      "module": "feature/playlist",
+      "platform": "ios",
+      "direct": false,
+      "trace": {
+        "steps": [
+          {
+            "module": "feature/player",
+            "note": "变更源",
+            "edge": null
+          },
+          {
+            "module": "feature/playlist",
+            "note": "直接依赖 feature/player",
+            "edge": {
+              "via": "explicit",
+              "pattern": null,
+              "platforms": null,
+              "describe": "直接依赖 feature/player"
+            }
+          }
+        ],
+        "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+      }
+    },
+    {
+      "artifact": "feature/playlist:web",
+      "module": "feature/playlist",
+      "platform": "web",
+      "direct": false,
+      "trace": {
+        "steps": [
+          {
+            "module": "feature/player",
+            "note": "变更源",
+            "edge": null
+          },
+          {
+            "module": "feature/playlist",
+            "note": "直接依赖 feature/player",
+            "edge": {
+              "via": "explicit",
+              "pattern": null,
+              "platforms": null,
+              "describe": "直接依赖 feature/player"
+            }
+          }
+        ],
+        "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+      }
+    },
+    {
+      "artifact": "platform/keystore-android:android",
+      "module": "platform/keystore-android",
+      "platform": "android",
+      "direct": false,
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          },
+          {
+            "module": "platform/keystore-android",
+            "note": "直接依赖 core/crypto",
+            "edge": {
+              "via": "explicit",
+              "pattern": null,
+              "platforms": null,
+              "describe": "直接依赖 core/crypto"
+            }
+          }
+        ],
+        "cycle_note": null
+      }
+    },
+    {
+      "artifact": "platform/keystore-ios:ios",
+      "module": "platform/keystore-ios",
+      "platform": "ios",
+      "direct": false,
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          },
+          {
+            "module": "platform/keystore-ios",
+            "note": "直接依赖 core/crypto",
+            "edge": {
+              "via": "explicit",
+              "pattern": null,
+              "platforms": null,
+              "describe": "直接依赖 core/crypto"
+            }
+          }
+        ],
+        "cycle_note": null
+      }
+    }
+  ],
+  "tests": {
+    "selected": [
+      {
+        "test": {
+          "name": "crypto-arch-android",
+          "kind": "arch",
+          "cost": 45,
+          "platforms": [
+            "android"
+          ],
+          "covers_contracts": [],
+          "generic": false
+        },
+        "obligations": [
+          {
+            "describe": "core/crypto @ android 的架构专用验证",
+            "type": "arch",
+            "module": "core/crypto",
+            "platform": "android",
+            "contract": null,
+            "direct": true,
+            "trace": {
+              "steps": [
+                {
+                  "module": "core/crypto",
+                  "note": "变更源",
+                  "edge": null
+                }
+              ],
+              "cycle_note": null
+            }
+          }
+        ]
+      },
+      {
+        "test": {
+          "name": "crypto-arch-ios",
+          "kind": "arch",
+          "cost": 45,
+          "platforms": [
+            "ios"
+          ],
+          "covers_contracts": [],
+          "generic": false
+        },
+        "obligations": [
+          {
+            "describe": "core/crypto @ ios 的架构专用验证",
+            "type": "arch",
+            "module": "core/crypto",
+            "platform": "ios",
+            "contract": null,
+            "direct": true,
+            "trace": {
+              "steps": [
+                {
+                  "module": "core/crypto",
+                  "note": "变更源",
+                  "edge": null
+                }
+              ],
+              "cycle_note": null
+            }
+          }
+        ]
+      },
+      {
+        "test": {
+          "name": "player-playlist-e2e",
+          "kind": "e2e",
+          "cost": 60,
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ],
+          "covers_contracts": [],
+          "generic": false
+        },
+        "obligations": [
+          {
+            "describe": "feature/player @ android 的架构专用验证",
+            "type": "arch",
+            "module": "feature/player",
+            "platform": "android",
+            "contract": null,
+            "direct": true,
+            "trace": {
+              "steps": [
+                {
+                  "module": "feature/player",
+                  "note": "变更源",
+                  "edge": null
+                }
+              ],
+              "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+            }
+          },
+          {
+            "describe": "feature/player @ ios 的架构专用验证",
+            "type": "arch",
+            "module": "feature/player",
+            "platform": "ios",
+            "contract": null,
+            "direct": true,
+            "trace": {
+              "steps": [
+                {
+                  "module": "feature/player",
+                  "note": "变更源",
+                  "edge": null
+                }
+              ],
+              "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+            }
+          },
+          {
+            "describe": "feature/player @ web 的架构专用验证",
+            "type": "arch",
+            "module": "feature/player",
+            "platform": "web",
+            "contract": null,
+            "direct": true,
+            "trace": {
+              "steps": [
+                {
+                  "module": "feature/player",
+                  "note": "变更源",
+                  "edge": null
+                }
+              ],
+              "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+            }
+          },
+          {
+            "describe": "feature/playlist @ android 的架构专用验证",
+            "type": "arch",
+            "module": "feature/playlist",
+            "platform": "android",
+            "contract": null,
+            "direct": false,
+            "trace": {
+              "steps": [
+                {
+                  "module": "feature/player",
+                  "note": "变更源",
+                  "edge": null
+                },
+                {
+                  "module": "feature/playlist",
+                  "note": "直接依赖 feature/player",
+                  "edge": {
+                    "via": "explicit",
+                    "pattern": null,
+                    "platforms": null,
+                    "describe": "直接依赖 feature/player"
+                  }
+                }
+              ],
+              "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+            }
+          },
+          {
+            "describe": "feature/playlist @ ios 的架构专用验证",
+            "type": "arch",
+            "module": "feature/playlist",
+            "platform": "ios",
+            "contract": null,
+            "direct": false,
+            "trace": {
+              "steps": [
+                {
+                  "module": "feature/player",
+                  "note": "变更源",
+                  "edge": null
+                },
+                {
+                  "module": "feature/playlist",
+                  "note": "直接依赖 feature/player",
+                  "edge": {
+                    "via": "explicit",
+                    "pattern": null,
+                    "platforms": null,
+                    "describe": "直接依赖 feature/player"
+                  }
+                }
+              ],
+              "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+            }
+          },
+          {
+            "describe": "feature/playlist @ web 的架构专用验证",
+            "type": "arch",
+            "module": "feature/playlist",
+            "platform": "web",
+            "contract": null,
+            "direct": false,
+            "trace": {
+              "steps": [
+                {
+                  "module": "feature/player",
+                  "note": "变更源",
+                  "edge": null
+                },
+                {
+                  "module": "feature/playlist",
+                  "note": "直接依赖 feature/player",
+                  "edge": {
+                    "via": "explicit",
+                    "pattern": null,
+                    "platforms": null,
+                    "describe": "直接依赖 feature/player"
+                  }
+                }
+              ],
+              "cycle_note": "循环依赖组 #1(feature/player ↔ feature/playlist):任一成员变更,全组制品失效"
+            }
+          }
+        ]
+      },
+      {
+        "test": {
+          "name": "shell-arch-android",
+          "kind": "arch",
+          "cost": 50,
+          "platforms": [
+            "android"
+          ],
+          "covers_contracts": [],
+          "generic": false
+        },
+        "obligations": [
+          {
+            "describe": "app/shell @ android 的架构专用验证",
+            "type": "arch",
+            "module": "app/shell",
+            "platform": "android",
+            "contract": null,
+            "direct": false,
+            "trace": {
+              "steps": [
+                {
+                  "module": "core/crypto",
+                  "note": "变更源",
+                  "edge": null
+                },
+                {
+                  "module": "app/shell",
+                  "note": "直接依赖 core/crypto",
+                  "edge": {
+                    "via": "explicit",
+                    "pattern": null,
+                    "platforms": null,
+                    "describe": "直接依赖 core/crypto"
+                  }
+                }
+              ],
+              "cycle_note": null
+            }
+          }
+        ]
+      },
+      {
+        "test": {
+          "name": "shell-arch-ios",
+          "kind": "arch",
+          "cost": 50,
+          "platforms": [
+            "ios"
+          ],
+          "covers_contracts": [],
+          "generic": false
+        },
+        "obligations": [
+          {
+            "describe": "app/shell @ ios 的架构专用验证",
+            "type": "arch",
+            "module": "app/shell",
+            "platform": "ios",
+            "contract": null,
+            "direct": false,
+            "trace": {
+              "steps": [
+                {
+                  "module": "core/crypto",
+                  "note": "变更源",
+                  "edge": null
+                },
+                {
+                  "module": "app/shell",
+                  "note": "直接依赖 core/crypto",
+                  "edge": {
+                    "via": "explicit",
+                    "pattern": null,
+                    "platforms": null,
+                    "describe": "直接依赖 core/crypto"
+                  }
+                }
+              ],
+              "cycle_note": null
+            }
+          }
+        ]
+      },
+      {
+        "test": {
+          "name": "keystore-android-arch",
+          "kind": "arch",
+          "cost": 30,
+          "platforms": [
+            "android"
+          ],
+          "covers_contracts": [],
+          "generic": false
+        },
+        "obligations": [
+          {
+            "describe": "platform/keystore-android @ android 的架构专用验证",
+            "type": "arch",
+            "module": "platform/keystore-android",
+            "platform": "android",
+            "contract": null,
+            "direct": false,
+            "trace": {
+              "steps": [
+                {
+                  "module": "core/crypto",
+                  "note": "变更源",
+                  "edge": null
+                },
+                {
+                  "module": "platform/keystore-android",
+                  "note": "直接依赖 core/crypto",
+                  "edge": {
+                    "via": "explicit",
+                    "pattern": null,
+                    "platforms": null,
+                    "describe": "直接依赖 core/crypto"
+                  }
+                }
+              ],
+              "cycle_note": null
+            }
+          }
+        ]
+      },
+      {
+        "test": {
+          "name": "crypto-contract",
+          "kind": "contract",
+          "cost": 20,
+          "platforms": [],
+          "covers_contracts": [
+            "crypto.sign",
+            "crypto.verify"
+          ],
+          "generic": true
+        },
+        "obligations": [
+          {
+            "describe": "core/crypto 声明的契约 crypto.sign",
+            "type": "contract",
+            "module": "core/crypto",
+            "platform": null,
+            "contract": "crypto.sign",
+            "direct": true,
+            "trace": {
+              "steps": [
+                {
+                  "module": "core/crypto",
+                  "note": "变更源",
+                  "edge": null
+                }
+              ],
+              "cycle_note": null
+            }
+          },
+          {
+            "describe": "core/crypto 声明的契约 crypto.verify",
+            "type": "contract",
+            "module": "core/crypto",
+            "platform": null,
+            "contract": "crypto.verify",
+            "direct": true,
+            "trace": {
+              "steps": [
+                {
+                  "module": "core/crypto",
+                  "note": "变更源",
+                  "edge": null
+                }
+              ],
+              "cycle_note": null
+            }
+          }
+        ]
+      }
+    ],
+    "total_cost": 300,
+    "budget": 300,
+    "remaining": 0,
+    "obligations_total": 16,
+    "obligations_covered": 13,
+    "risks_over_budget": true
+  },
+  "risks": [
+    {
+      "id": "R1",
+      "kind": "no-test",
+      "severity": "critical",
+      "obligation": {
+        "type": "arch",
+        "module": "core/crypto",
+        "platform": "web",
+        "contract": null,
+        "direct": true
+      },
+      "summary": "无可用测试:core/crypto @ web 的架构专用验证 没有任何候选",
+      "detail": "模块 core/crypto 直接变更,web 平台制品已失效,但没有任何 arch/e2e 测试覆盖 (core/crypto, web)。该模块声明的契约 [crypto.sign, crypto.verify] 可由通用契约测试覆盖,但契约之外的 web 平台专属行为没有任何测试验证——通用测试不能替代架构专用用例。需要补一个覆盖该模块该平台用例的架构/端到端测试。",
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          }
+        ],
+        "cycle_note": null
+      },
+      "needed_cost": null,
+      "remaining_budget": null
+    },
+    {
+      "id": "R2",
+      "kind": "budget",
+      "severity": "high",
+      "obligation": {
+        "type": "arch",
+        "module": "app/shell",
+        "platform": "web",
+        "contract": null,
+        "direct": false
+      },
+      "summary": "预算不足:app/shell @ web 的架构专用验证 无法安排",
+      "detail": "模块 app/shell 受变更传递影响,制品需要app/shell @ web 的架构专用验证;最便宜的候选测试 shell-e2e-web 需 90 分钟,但剩余预算只有 50 分钟。该项验证缺失将随本次发布上线,建议追加预算或单独补跑 shell-e2e-web。",
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          },
+          {
+            "module": "app/shell",
+            "note": "直接依赖 core/crypto",
+            "edge": {
+              "via": "explicit",
+              "pattern": null,
+              "platforms": null,
+              "describe": "直接依赖 core/crypto"
+            }
+          }
+        ],
+        "cycle_note": null
+      },
+      "needed_cost": 90,
+      "remaining_budget": 50
+    },
+    {
+      "id": "R3",
+      "kind": "budget",
+      "severity": "high",
+      "obligation": {
+        "type": "arch",
+        "module": "platform/keystore-ios",
+        "platform": "ios",
+        "contract": null,
+        "direct": false
+      },
+      "summary": "预算不足:platform/keystore-ios @ ios 的架构专用验证 无法安排",
+      "detail": "模块 platform/keystore-ios 受变更传递影响,制品需要platform/keystore-ios @ ios 的架构专用验证;最便宜的候选测试 keystore-ios-arch 需 30 分钟,但剩余预算只有 20 分钟。该项验证缺失将随本次发布上线,建议追加预算或单独补跑 keystore-ios-arch。",
+      "trace": {
+        "steps": [
+          {
+            "module": "core/crypto",
+            "note": "变更源",
+            "edge": null
+          },
+          {
+            "module": "platform/keystore-ios",
+            "note": "直接依赖 core/crypto",
+            "edge": {
+              "via": "explicit",
+              "pattern": null,
+              "platforms": null,
+              "describe": "直接依赖 core/crypto"
+            }
+          }
+        ],
+        "cycle_note": null
+      },
+      "needed_cost": 30,
+      "remaining_budget": 20
+    }
+  ],
+  "warnings": [
+    "有 1 个变更无法映射到任何模块,已忽略(见报告)"
+  ],
+  "stats": {
+    "modules": 10,
+    "tests": 10,
+    "edges": 16,
+    "changed": 2,
+    "invalidated": 14,
+    "selected_tests": 7,
+    "risks": 3
+  }
+}
